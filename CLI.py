@@ -12,6 +12,8 @@ def start():
     while True:
         command = input("> ")
         if command.split(" ")[0] == "run":
+            if not command.split(" ")[1].endswith(".tire"):
+                print_error("Error: File must be a .tire file.")
             tire = Tire(open(command.split()[1]).read())
             tire.run()
         else:
