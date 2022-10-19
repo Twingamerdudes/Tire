@@ -8,6 +8,7 @@ To run the cli, just install [Python](https://www.python.org/).
 Then open cmd in the source code's directory and type in: python main.py.
 
 If you don't want to open the CLI, then type in python main.py (file you want to open)
+
 Then to run a file with the CLI, type in run (file name)
 
 # Contributing guidelines
