@@ -1,0 +1,113 @@
+var False = 0
+var True = 1
+Fn random(){
+    System("python lib/rand.py $1 $2")
+    var out = Output
+    return out
+}
+Fn readFile(){
+    System("python lib/file_read.py $1")
+    var out = Output
+    return out
+}
+Fn writeFile(){
+    System("python lib/file_write.py $1 $2")
+}
+Fn eqAnd(){
+    var p1 = 0
+    var p2 = 0
+    if $1 == $2{
+        p1 = True
+    }
+    if $3 == $4{
+        p2 = True
+    }
+    if p1 == True{
+        if p2 == True{
+            return True
+        }
+        else{
+            return False
+        }
+    }
+    else{
+        return False
+    }
+}
+Fn ltAnd(){
+    var p1 = 0
+    var p2 = 0
+    if $1 < $2{
+        p1 = True
+    }
+    if $3 < $4{
+        p2 = True
+    }
+    if p1 == True{
+        if p2 == True{
+            return True
+        }
+        else{
+            return False
+        }
+    }
+    else{
+        return False
+    }
+}
+Fn mtAnd(){
+    var p1 = 0
+    var p2 = 0
+    if $1 > $2{
+        p1 = True
+    }
+    if $3 > $4{
+        p2 = True
+    }
+    if p1 == True{
+        if p2 == True{
+            return True
+        }
+        else{
+            return False
+        }
+    }
+    else{
+        return False
+    }
+}
+Fn eqOr(){
+    if $1 == $2{
+        return True
+    }
+    if $3 == $4{
+        return True
+    }
+}
+Fn ltOr(){
+    if $1 < $2{
+        return True
+    }
+    if $3 < $4{
+        return True
+    }
+}
+Fn mtOr(){
+    if $1 > $2{
+        return True
+    }
+    if $3 > $4{
+        return True
+    }
+}
+Fn clear(){
+    System("cls")
+}
+Fn makeArray(){
+    System("python lib/array.py $1 make")
+}
+Fn getArray(){
+    System("python lib/array.py sus sus temp $1")
+    var out = Output
+    return out
+}
