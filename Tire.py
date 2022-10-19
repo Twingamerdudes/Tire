@@ -260,16 +260,19 @@ class Tire:
                         if not type(temp2) == int:
                             if temp2.isnumeric():
                                 temp2 = int(temp2)
-                    if "." in temp:
-                        temp = handleDots(tokens, pos)
-                        if not type(temp) == int:
-                            if temp.isnumeric():
-                                temp = int(temp)
-                    if "." in temp2:
-                        temp2 = handleDots(tokens, pos, 3)
-                        if not type(temp) == int:
-                            if temp.isnumeric():
-                                temp = int(temp) 
+                    try:
+                        if "." in temp:
+                            temp = handleDots(tokens, pos)
+                            if not type(temp) == int:
+                                if temp.isnumeric():
+                                    temp = int(temp)
+                        if "." in temp2:
+                            temp2 = handleDots(tokens, pos, 3)
+                            if not type(temp) == int:
+                                if temp.isnumeric():
+                                    temp = int(temp)
+                    except:
+                        pass
                     if tokens[pos + 1]["value"].isnumeric():
                         temp = int(temp)
                     if tokens[pos + 3]["value"].isnumeric():
