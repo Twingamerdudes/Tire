@@ -8,7 +8,7 @@ def start():
   |    |   |  ||  | \/\  ___/  \     \___|    |___|   |
   |____|   |__||__|    \___  >  \______  /_______ \___|
                            \/          \/        \/ """, 51, 184, 100)
-    print_color("Check out our GitHub page: (Work in progress)", 24, 154, 211)
+    print_color("Check out our GitHub page: https://github.com/Twingamerdudes/Tire", 24, 154, 211)
     while True:
         command = input("> ")
         if command.split(" ")[0] == "run":
