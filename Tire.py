@@ -29,8 +29,6 @@ def handleMath(tokens, pos, offset=3):
     except:
         if tokens[pos+offset+1]["type"] != "math" and tokens[pos+offset+1] == "operator":
             print_error("Error: Invalid operator: " + tokens[pos+offset+1]["value"])
-        else:
-            print_error("Error: Unknown error while computing a equation.")
     if operator == "+":
         result = str(num1 + num2)
     elif operator == "-":
@@ -56,7 +54,7 @@ def handleDots(tokens, pos, offset=0):
     return value
 class Tire:
     def __init__(self, code, inFunction=False, Importing=False):
-        self.code = code.replace("(", " ").replace(")", " ").replace("{", " ").replace("}", "end ")
+        self.code = code.replace("(", " ").replace(")", " ").replace("{", " ").replace("}", "end ").replace(",", " ")
         self.code += "\0"
         self.inFunction = inFunction
         self.stopExecution = False
@@ -390,7 +388,10 @@ class Tire:
                         tire = Tire(functions[tokens[pos+1]["value"]], True)
                         index = 1
                         while tokens[pos+2]["type"] != "keyword" and tokens[pos+2]["type"] != "other" and tokens[pos+2]["type"] != "eof":
-                            tire.code = tire.code.replace("$" + str(index), tokens[pos+2]["value"])
+                            if tokens[pos+2]["type"] != "string":
+                                tire.code = tire.code.replace("$" + str(index), tokens[pos+2]["value"])
+                            else:
+                                tire.code = tire.code.replace("$" + str(index), "\"" + tokens[pos+2]["value"] + "\"")
                             pos += 1
                             index += 1                 
                     else:
