@@ -10,6 +10,7 @@ Then open cmd in the source code's directory and type in: python main.py.
 If you don't want to open the CLI, then type in python main.py (file you want to open)
 
 Then to run a file with the CLI, type in run (file name)
+Then learn how to use [it](https://www.youtube.com/watch?v=ZTWzKk6QMMg)
 
 # Conclusion
 Well, thanks for reading, hope you have fun with my language!
