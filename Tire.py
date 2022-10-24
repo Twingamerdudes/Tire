@@ -39,6 +39,8 @@ def handleMath(tokens, pos, offset=3):
         result = str(num1 / num2)
     elif operator == "%":
         result = str(num1 % num2)
+    elif operator == "**":
+        result = str(num1 ** num2)
     return result
 def handleDots(tokens, pos, offset=0):
     item = tokens[pos + 1 + offset]["value"].split(".")[1]
@@ -119,6 +121,9 @@ class Tire:
             elif currentChar in mathOperators:
                 if currentChar == "+" and self.code[pos+1] == "=":
                     tokens.append({'type': "operator", 'value': "+="})
+                    pos += 1
+                elif currentChar == "*" and self.code[pos+1] == "*":
+                    tokens.append({'type': "math", 'value': "**"})
                     pos += 1
                 else:
                     tokens.append({'type': "math", 'value': currentChar})
@@ -426,6 +431,14 @@ class Tire:
                         self.stop()
                         continue
                     else:
+                        if returnType == "number":
+                            sum = handleMath(tokens, pos, 1)
+                            if sum != None:
+                                returnValue = sum
+                                tokens[pos + 2]["value"] = ""
+                                tokens[pos + 3]["value"] = ""
+                                tokens[pos + 2]["type"] = "ignore"
+                                tokens[pos + 3]["type"] = "ignore"
                         returnType = tokens[pos+1]["type"]
                         pos += 2
                         self.stop()
