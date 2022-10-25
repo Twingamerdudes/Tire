@@ -9,7 +9,7 @@ def print_color(text, r, g, b):
     print(get_color_escape(r, g, b) 
       + text
       + RESET)
-def print_error(text):
+def print_error_msg(text):
     print_color(text, 194, 24, 8)
     os.system("pause")
     exit(1)

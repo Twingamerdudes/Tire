@@ -3,12 +3,16 @@ functions = {}
 skipElseStatment = False
 returnValue = ""
 returnType = ""
+lineNum = 1
+line = ""
 from msilib.schema import ControlCondition
 from os import system
 import os
 import temp as tmp
 
-from Util import isfloat, print_error
+from Util import isfloat, print_error_msg
+def print_error(message):
+    print_error_msg(message + ". Found at line " + str(lineNum))
 def handleMath(tokens, pos, offset=3):
     num1 = 0
     operator = ""
@@ -75,6 +79,8 @@ class Tire:
         while pos < length:
             currentChar = self.code[pos]
             if currentChar == " " or currentChar == "\n" or currentChar == "\0" or currentChar == "\t":
+                if currentChar == "\n":
+                    tokens.append({'type': "newline", 'value': ""})
                 pos += 1
                 continue
             elif currentChar == "\"":
@@ -138,10 +144,15 @@ class Tire:
         global skipElseStatment
         global returnValue
         global returnType
+        global lineNum
         while pos < length:
             if self.stopExecution and not self.Importing:
                 return
             token = tokens[pos]
+            if token["type"] == "newline":
+                lineNum += 1
+                pos += 1
+                continue
             if token["type"] == "keyword":
                 if token["value"] == "Print":
                     missing = False
@@ -207,7 +218,9 @@ class Tire:
                         tire = Tire(functions[tokens[pos+3]["value"]], True)
                         index = 1
                         name = tokens[pos + 1]["value"]
-                        while tokens[pos+4]["type"] != "keyword" and tokens[pos+4]["type"] != "other" and tokens[pos+4]["type"] != "eof":
+                        while tokens[pos+4]["type"] != "keyword" and tokens[pos+4]["type"] != "other" and tokens[pos+4]["type"] != "eof" and tokens[pos+4]["type"] != "newline":
+                            if tokens[pos]["type"] == "newline":
+                                lineNum += 1
                             tire.code = tire.code.replace("$" + str(index), tokens[pos+4]["value"])
                             pos += 1
                             index += 1
@@ -314,6 +327,7 @@ class Tire:
                         print_error("Error: Invalid Operator " + tokens[pos + 2]["value"])
                     if not isTrue:
                         temp3 = self.indentLevel
+                        lineNum += 1
                         pos += 4
                         while True:
                             if tokens[pos]["value"] == "end" and temp3 == self.indentLevel:
@@ -327,6 +341,8 @@ class Tire:
                                 self.indentLevel += 1
                             if tokens[pos]["value"] == "Loop":
                                 self.indentLevel += 1
+                            if tokens[pos]["type"] == "newline":
+                                lineNum += 1
                             pos += 1
                     else:
                         skipElseStatment = True
@@ -347,6 +363,8 @@ class Tire:
                             self.indentLevel += 1
                         if tokens[pos]["value"] == "Loop":
                                 self.indentLevel += 1
+                        if tokens[pos]["type"] == "newline":
+                            lineNum += 1
                         pos += 1
                     pos += 1
                     skipElseStatment = False
@@ -368,6 +386,7 @@ class Tire:
                 elif token["value"] == "Fn":
                     name = tokens[pos+1]["value"]
                     definition = ""
+                    lineNum += 1
                     pos += 2
                     temp = self.indentLevel
                     while True:
@@ -386,17 +405,21 @@ class Tire:
                             definition += "\""+ tokens[pos]["value"] + "\"" + " "
                         else:
                             definition += tokens[pos]["value"] + " "
+                        if tokens[pos]["type"] == "newline":
+                            lineNum += 1
                         pos += 1
                     functions[name] = definition.replace("(", " ").replace(")", " ").replace("{", " ").replace("}", "end").replace(",", " ")
                 elif token["value"] == "Call":
                     if tokens[pos+1]["value"] in functions:
                         tire = Tire(functions[tokens[pos+1]["value"]], True)
                         index = 1
-                        while tokens[pos+2]["type"] != "keyword" and tokens[pos+2]["type"] != "other" and tokens[pos+2]["type"] != "eof":
+                        while tokens[pos+2]["type"] != "keyword" and tokens[pos+2]["type"] != "other" and tokens[pos+2]["type"] != "eof" and tokens[pos+2]["type"] != "newline":
                             if tokens[pos+2]["type"] != "string":
                                 tire.code = tire.code.replace("$" + str(index), tokens[pos+2]["value"])
                             else:
                                 tire.code = tire.code.replace("$" + str(index), "\"" + tokens[pos+2]["value"] + "\"")
+                            if tokens[pos+2]["type"] == "newline":
+                                lineNum += 1
                             pos += 1
                             index += 1                 
                     else:
@@ -447,6 +470,7 @@ class Tire:
                     temp = self.indentLevel
                     variables["i"] = 0
                     times = tokens[pos+1]["value"]
+                    lineNum += 1
                     pos += 2
                     while True:
                         if tokens[pos]["value"] == "end" and temp == self.indentLevel:
@@ -460,6 +484,8 @@ class Tire:
                             self.indentLevel += 1
                         if tokens[pos]["value"] == "Struct":
                             self.indentLevel += 1
+                        if tokens[pos]["type"] == "newline":
+                            lineNum += 1
                         if tokens[pos]["type"] == "string":
                             code += "\""+ tokens[pos]["value"] + "\"" + " "
                         else:
@@ -482,6 +508,7 @@ class Tire:
                     code = []
                     temp = self.indentLevel
                     name = tokens[pos+1]["value"]
+                    lineNum += 1
                     pos += 2
                     while True:
                         if tokens[pos]["value"] == "end" and temp == self.indentLevel:
@@ -493,6 +520,8 @@ class Tire:
                             self.indentLevel += 1
                         if tokens[pos]["value"] == "Loop":
                             self.indentLevel += 1
+                        if tokens[pos]["type"] == "newline":
+                            lineNum += 1
                         code += [tokens[pos]["value"]]
                         pos += 1
                     temp = []
@@ -547,7 +576,9 @@ class Tire:
                         tire = Tire(functions[tokens[pos+2]["value"]], True)
                         index = 1
                         name = tokens[pos + 1]["value"]
-                        while tokens[pos+4]["type"] != "keyword" and tokens[pos+3]["type"] != "other" and tokens[pos+3]["type"] != "eof":
+                        while tokens[pos+4]["type"] != "keyword" and tokens[pos+4]["type"] != "other" and tokens[pos+4]["type"] != "eof" and tokens[pos+4]["type"] != "newline":
+                            if tokens[pos+4]["type"] == "newline":
+                                lineNum += 1
                             tire.code = tire.code.replace("$" + str(index), tokens[pos+4]["value"])
                             pos += 1
                             index += 1
@@ -589,7 +620,7 @@ class Tire:
                         continue
                     variables[tokens[pos]["value"]] = variables[tokens[pos + 2]["value"]]
                 pos += 3
-            elif token["type"] != "ignore" and token["type"] != "eof":
+            elif token["type"] != "ignore" and token["type"] != "eof" and token["type"] != "newline":
                 print_error("Error: Unexpected token \"" + token["value"] + "\"")
             else:
                 pos += 1
