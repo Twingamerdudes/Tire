@@ -5,7 +5,6 @@ returnValue = ""
 returnType = ""
 lineNum = 1
 line = ""
-from msilib.schema import ControlCondition
 from os import system
 import os
 import temp as tmp
