@@ -3,7 +3,9 @@
 
 Welcome to the Tire GitHub page! Here is the source code of the programming language tire.
 
-## Runing
+Also here is the Vscode [extension](https://marketplace.visualstudio.com/items?itemName=Twingamerdudes.tireSupport) for Tire
+
+## Running
 To run the cli, just install [Python](https://www.python.org/).
 Then open cmd in the source code's directory and type in: python main.py.
 
